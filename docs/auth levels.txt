@@ -1,0 +1,16 @@
+http://www.restapitutorial.com/lessons/httpmethods.html
+auth levels
+
+0 -- No login need. Public to anyone
+	index.html
+
+1 -- Loggin optional but public to anyone
+	e.g a login page
+	can have an active user
+2 -- 
+	will have an active user
+3 -- 
+
+4 -- Login needed. Max authtication
+	PUT
+	username : I_Like_PIE
