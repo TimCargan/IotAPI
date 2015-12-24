@@ -1,0 +1,62 @@
+
+type struct User {
+	v int `json: "v"`
+	id string `json: "id"`
+	username string `json: "username"`
+	email string `json: "email"`
+	dob	Time `json: "dob"`
+	name Name `json: "name"`
+
+}
+
+type struct Name{
+	fullname string `json: "fullname"`
+	nickname string `json: "nickname"`
+}
+
+type struct Pass{
+	v int `json: "v"`
+	id string `json: "id"`	
+	hash string `json: "hash"`
+}
+
+
+type struct Home{
+	v	int `json: "v"`
+	id string `json: "id"`
+	name string `json: "name"`
+	users [user] `json: "users"`
+	dev	[dev] `json: "dev"`
+	rooms [Room] `json: "rooms"`
+}
+
+type struct Room{
+	v
+	id
+	name 	String
+	users	[users]
+	dev 	[dev]
+}
+
+
+Dev {
+	id
+	v
+	verson	Verson
+	mac		mac-address
+	type	enum
+	props	[properite]
+}
+
+Propertie {
+	id
+	name 	string
+	value	int
+}
+
+Version {
+	v
+	Major
+	Minor
+
+}
