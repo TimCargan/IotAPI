@@ -9,11 +9,14 @@ import (
 const mongo_address = "localhost"
 const MAX_LOGIN_ATTEMPTS = 20
 
+var (
+	Mongo *mgo.Session
+	)
 func main() {
 	a := gin.Default()
 
 	//Set DB connection
-	session, err := mgo.Dial(mongo_address)
+	Mongo, err := mgo.Dial(mongo_address)
 	if err != nil {
 		panic("db error")
 	}
@@ -21,8 +24,7 @@ func main() {
 	//Set session properties
 	//TODO: Needs to be improved 
 	so := gin.SessionOptions{"","localhost",300,true,false}
-	
-	store := mongo.NewMongoStore(session, "test", "session")
+	store := mongo.NewMongoStore(Mongo.Copy(), "test", "session")
 	a.Use(gin.Session(store, &so))
 
 	a.LoadHTMLGlob("/Users/tim/websites/iot/*")

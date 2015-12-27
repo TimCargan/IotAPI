@@ -2,6 +2,8 @@ package main
 
 import(
 	"github.com/gin-gonic/gin"
+	"crypto/rand"
+	"encoding/hex"
 	)
 
 /*
@@ -34,5 +36,21 @@ func auth(c *gin.Context, level int64) bool{
 	return false
 }
 
-func isuser
+func isuser (){
 
+}
+
+//Standard token of lenght 10
+func genToken() string {
+	return genToken_len(10)
+}
+//Copy from go doc (https://golang.org/pkg/crypto/rand/#example_Read)
+//but tweeked so it can have a spesifided len
+func genToken_len(len int) string {
+	b := make([]byte, len)
+	_, err := rand.Read(b)
+	if err != nil {
+		panic(err)
+	}
+	return hex.EncodeToString(b)
+}
