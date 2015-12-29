@@ -18,6 +18,7 @@ type User struct {
 	//Auth flow from temp to email verification
 	Istemp bool			`bson:"istemp,omitempty" json:"istemp,omitempty" structs:"-"`
 	EmailToken string	`bson:"emailtoken,omitempty" json:"emailtoken,omitempty" structs:"-"`
+	EmailExpires time.Time  `bson:"emailExpires" json:"emaillPasswordExpires" structs:"-"`
 	Email string 		`bson:"email" json:"email,omitempty" structs:"email,omitempty"`
 
 	//username, path is lowercase
@@ -42,6 +43,6 @@ type Pass struct{
 
 	Istemp bool			`bson:"istemp,omitempty" json:"istemp"`
 
-	ResetPasswordToken string `bson"resetToken" json: "resetPasswordToken"`
-  	ResetPasswordExpires time.Time  `bson"resetExpires" json: "resetPasswordExpires"`
+	ResetPasswordToken string `bson:"resetToken" json:"resetPasswordToken"`
+  	ResetPasswordExpires time.Time  `bson:"resetExpires" json:"resetPasswordExpires"`
 }
