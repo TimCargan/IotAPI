@@ -1,0 +1,14 @@
+
+	//Make sure the index is there
+	err = db.EnsureIndex(user_new_index)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	err = db.EnsureIndex(user_username_index)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}
+	err = db.EnsureIndex(user_email_index)
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+	}

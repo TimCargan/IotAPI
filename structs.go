@@ -16,7 +16,7 @@ type User struct {
 	Id bson.ObjectId 	`bson:"_id" json:"id,omitempty" structs:"-"`
 
 	//Auth flow from temp to email verification
-	Istemp bool			`bson:"Istemp,omitempty" json:"Istemp,omitempty" structs:"-"`
+	Istemp bool			`bson:"istemp,omitempty" json:"istemp,omitempty" structs:"-"`
 	EmailToken string	`bson:"emailtoken,omitempty" json:"emailtoken,omitempty" structs:"-"`
 	Email string 		`bson:"email" json:"email,omitempty" structs:"email,omitempty"`
 
@@ -34,11 +34,14 @@ type Name struct{
 }
 type settings  struct {}
 
+const PASS_V = 0
 type Pass struct{
 	V int 				`bson:"v" json: "v"`
 	Id bson.ObjectId 	`bson:"_id" json: "id"`	
 	Hash []byte 		`bson"hash" json: "hash"`
 
-	resetPasswordToken string `bson"resetToken" json: "hash"`
-  	resetPasswordExpires time.Time  `bson"resetExpires" json: "hash"`
+	Istemp bool			`bson:"istemp,omitempty" json:"istemp"`
+
+	ResetPasswordToken string `bson"resetToken" json: "resetPasswordToken"`
+  	ResetPasswordExpires time.Time  `bson"resetExpires" json: "resetPasswordExpires"`
 }

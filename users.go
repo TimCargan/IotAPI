@@ -14,8 +14,9 @@ import(
 /*
 Handler for POST /user/
 Handler for creating a user
-Takes a json object (of type user) and will add it to the database
-
+Takes a json object (of type user and login) and will add it to the database
+with the temp user flag and send an email to the user to validate the email.
+If the user doesnt respond to the email the user should be removed from the db.
 */
 func user_post(c *gin.Context) {
 	//DB connection
@@ -25,31 +26,13 @@ func user_post(c *gin.Context) {
 	}
 	defer mon.Close()
 	db := mon.DB("user").C("users")
+	pw := sess.DB("pass").C("pass")
 
-	//Make sure the index is there
-	err = db.EnsureIndex(user_new_index)
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-	}
-	err = db.EnsureIndex(user_username_index)
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-	}
-	err = db.EnsureIndex(user_email_index)
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-	}
-
-	//sess.SetSafe(&mgo.Safe{})
-	//collection := sess.DB("test").C("foo")
-	//pw := sess.DB("pass").C("pass")
 	user := User{}
 	pass := Pass{}
 	login := Login{}
 	c.Bind(&user)
 	c.Bind(&login)
-
-	//Santize user
 
 	//Set user info
 	user.V = USER_V
@@ -58,24 +41,34 @@ func user_post(c *gin.Context) {
 	user.Istemp = true
 	user.EmailToken = genToken()
 
+	//Attept to add user to db
 	dberr := db.Insert(user)
-	switch {
-	case mgo.IsDup(dberr):
+	if mgo.IsDup(dberr){
 		if strings.Contains(dberr.Error(), " email_1 ") {
 			c.String(http.StatusOK, "email")
 		}else{
 			c.String(http.StatusOK, "user")
 		}
 		return
-	case dberr != nil:
+	}else if dberr != nil{
 		c.AbortWithError(http.StatusInternalServerError, dberr)
 		return
 	}
 
-	//pw, err := bcrypt.GenerateFromPassword([]byte(login.Pass), 12)
-	//pass.Hash = pw
+	//Create pass object
+	hash, err := bcrypt.GenerateFromPassword([]byte(login.Pass), 12)
+	if err != nil {
+		//TODO: Should prob invalidate user account
+		c.AbortWithError(500, err)
+	}
+	pass.Hash = hash
 	pass.Id = user.Id
-	//err = pw.Insert(pass)
+	pass.Istemp = true
+	//Insert password into db
+	dberr = pw.Insert(pass)
+	if dberr != nil {
+		c.AbortWithError(500, dberr)
+	}
 
 	//Hack to get it to compile without error checking
 	c.JSON(http.StatusOK, user )
