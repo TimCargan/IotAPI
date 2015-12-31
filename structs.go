@@ -15,6 +15,9 @@ type User struct {
 	V int 				`bson:"v" json:"v" structs:"-"`
 	Id bson.ObjectId 	`bson:"_id" json:"id,omitempty" structs:"-"`
 
+	//Password string only used for user creation object binding
+	Pass string 		`json:"pass,omitempty" bson:"-" structs:"-"`
+
 	//Auth flow from temp to email verification
 	Istemp bool			`bson:"istemp,omitempty" json:"istemp,omitempty" structs:"-"`
 	EmailToken string	`bson:"emailtoken,omitempty" json:"emailtoken,omitempty" structs:"-"`
@@ -33,6 +36,7 @@ type Name struct{
 	Fullname string 	`bson:"fullname,omitempty" json:"fullname,omitempty" structs:"fullname,omitempty"`
 	Nickname string 	`bson:"nickname,omitempty" json:"nickname,omitempty" structs:"nickname,omitempty"`
 }
+
 type settings  struct {}
 
 const PASS_V = 0

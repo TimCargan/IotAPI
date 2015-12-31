@@ -7,7 +7,7 @@ import(
 	 "github.com/fatih/structs"
 	 "net/http"
 	 "strings"
-	 //"golang.org/x/crypto/bcrypt"
+	 "golang.org/x/crypto/bcrypt"
 	 //"strconv"
 	 )
 
@@ -26,13 +26,10 @@ func user_post(c *gin.Context) {
 	}
 	defer mon.Close()
 	db := mon.DB("user").C("users")
-	pw := sess.DB("pass").C("pass")
+	pw := mon.DB("pass").C("pass")
 
 	user := User{}
-	pass := Pass{}
-	login := Login{}
 	c.Bind(&user)
-	c.Bind(&login)
 
 	//Set user info
 	user.V = USER_V
@@ -49,14 +46,15 @@ func user_post(c *gin.Context) {
 		}else{
 			c.String(http.StatusOK, "user")
 		}
-		return
+		//return
 	}else if dberr != nil{
 		c.AbortWithError(http.StatusInternalServerError, dberr)
-		return
+		//return
 	}
 
 	//Create pass object
-	hash, err := bcrypt.GenerateFromPassword([]byte(login.Pass), 12)
+	pass := Pass{}
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Pass), 12)
 	if err != nil {
 		//TODO: Should prob invalidate user account
 		c.AbortWithError(500, err)
@@ -70,7 +68,6 @@ func user_post(c *gin.Context) {
 		c.AbortWithError(500, dberr)
 	}
 
-	//Hack to get it to compile without error checking
 	c.JSON(http.StatusOK, user )
 }
 
