@@ -56,7 +56,7 @@ func login_post(c *gin.Context) {
 	}
 
 	if hash.password_valid(c, login.Pass){
-		set_loggedin_user(c, user)
+		//set_loggedin_user(c, user)
 		return
 	}
 

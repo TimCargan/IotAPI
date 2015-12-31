@@ -33,7 +33,7 @@ func main() {
 	a.Static("/static/folder", "/Users/tim/websites/cargancode.github.io")
 
 	//Start the servers
-	go func(){ a.Run(":8080") }()
+	go func(){ a.Run(":8081") }()
 	a.RunTLS(":5050","/Users/tim/websites/tim_cert.pem", "/Users/tim/websites/tim_key.pem")
 	
 }
