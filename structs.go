@@ -6,9 +6,9 @@ import(
 	)
 
 type Login struct {
-	Email string 		`json:"email"`
-	Username string 	`json:"username"`
-	Pass string 		`json:"pass"`
+	Email string 		`form:"email" json:"email"`
+	Username string 	`form:"username" json:"username"`
+	Pass string 		`form:"pass" json:"pass"`
 }
 const USER_V = 0
 type User struct {

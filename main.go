@@ -10,21 +10,31 @@ const mongo_address = "localhost"
 const MAX_LOGIN_ATTEMPTS = 20
 
 var (
-	Mongo *mgo.Session
-	)
+	GS *mgo.Session
+)
+
 func main() {
 	a := gin.Default()
 
 	//Set DB connection
-	Mongo, err := mgo.Dial(mongo_address)
+	mongo_s, err := mgo.Dial(mongo_address)
 	if err != nil {
 		panic("db error")
 	}
+	// Reads may not be entirely up-to-date, but they will always see the
+	// history of changes moving forward, the data read will be consistent
+	// across sequential queries in the same session, and modifications made
+	// within the session will be observed in following queries (read-your-writes).
+	// http://godoc.org/labix.org/v2/mgo#Session.SetMode.
+	mongo_s.SetMode(mgo.Monotonic, true)
 
 	//Set session properties
 	//TODO: Needs to be improved 
-	so := gin.SessionOptions{"","localhost",300,true,false}
-	store := mongo.NewMongoStore(Mongo.Copy(), "test", "session")
+	so := gin.SessionOptions{"","localhost",300,false,false}
+	store := mongo.NewMongoStore(mongo_s.Copy(), "test", "session")
+
+	//GS = mongo_s.Copy()
+	a.Use(db_middle(mongo_s.Copy()))
 	a.Use(gin.Session(store, &so))
 
 	a.LoadHTMLGlob("/Users/tim/websites/iot/*")
@@ -35,5 +45,4 @@ func main() {
 	//Start the servers
 	go func(){ a.Run(":8081") }()
 	a.RunTLS(":5050","/Users/tim/websites/tim_cert.pem", "/Users/tim/websites/tim_key.pem")
-	
 }

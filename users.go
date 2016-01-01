@@ -117,31 +117,30 @@ func user_validate_email(c *gin.Context){
 Handler for Get /user/:uid
 */
 func user_get(c *gin.Context) {
-	hxid := c.Param("uid")
-
 	if auth(c, 3) == false {
 		c.String(401, "Must login")
 		return
 	}
-
+	hxid := c.Param("uid")
 	//DB connection
-	mon, err := mgo.Dial(mongo_address)
-	if err != nil {
-		panic("db error")
-	}
-	defer mon.Close()
-	db := mon.DB("test").C("foo")
+	mon := c.DB
+	db := mon.DB("user").C("users")
+	user := &User{}
 
-	//Fetch user from db
-	user := User{}
-	uid := bson.ObjectIdHex(hxid)
-	dberr := db.Find(bson.M{"_id": uid}).One(&user)
-	if dberr != nil {
-		c.String(200, "User not found " + string(uid) )
+	if hxid != "" {
+		//Fetch user from db
+		uid := bson.ObjectIdHex(hxid)
+		user = user.getById(uid, db)
+		if user == nil {
+			c.String(200, "User not found " + string(uid))
+			return
+		}
+	}else{
+		user.Current(c, db)
 	}
-
 	c.JSON(200, user)
 }
+
 
 /*
 Handler for Update /user/:uid
@@ -169,7 +168,6 @@ func user_put(c *gin.Context) {
 	user := User{}
 	c.Bind(&user)
 
-	structs.DefaultTagName = "json"
 	m := structs.Map(user)
 	
 	uid := bson.ObjectIdHex(hxid)

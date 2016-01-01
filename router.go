@@ -12,6 +12,7 @@ func make_routs(r *gin.Engine) {
 	r.GET("/user/:uid/auth", user_validate_email)
 	r.GET("/user/:uid/", user_get)
 	r.PUT("/user/:uid/", user_put)
+	r.GET("/user/", user_get)
 	r.POST("/user", user_post)
 }
 
