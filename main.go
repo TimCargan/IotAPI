@@ -3,7 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/contrib/gzip"
-	//"github.com/goibibo/gin-gzip"
+	//"github.com/gin-gonic/contrib/secure"
+
 	"github.com/plimble/sessions/store/mongo"
 	"gopkg.in/mgo.v2"
 )
@@ -13,14 +14,12 @@ const MAX_LOGIN_ATTEMPTS = 20
 
 
 func main() {
-	a := gin.Default()
 
 	//Set DB connection
 	mongo_s, err := mgo.Dial(mongo_address)
 	if err != nil {
 		panic("db error")
 	}
-	
 	// Reads may not be entirely up-to-date, but they will always see the
 	// history of changes moving forward, the data read will be consistent
 	// across sequential queries in the same session, and modifications made
@@ -33,14 +32,34 @@ func main() {
 	so := gin.SessionOptions{"","localhost",300,false,false}
 	store := mongo.NewMongoStore(mongo_s.Copy(), "test", "session")
 
+	a := gin.Default()
+	//Enable GZip on requets
 	a.Use(gzip.Gzip(gzip.DefaultCompression))
+	//DB midle were so sessions can access mongo
 	a.Use(db_middle(mongo_s.Copy()))
+	//Enables sessions
+	//TODO: Need to move out of Gin
 	a.Use(gin.Session(store, &so))
-
+	//Sets some usefull headers
+	/*
+	a.Use(secure.Secure(secure.Options{
+		IsDevelopment:		   gin.IsDebugging(),
+		AllowedHosts:          []string{"example.com", "ssl.example.com"},
+		SSLRedirect:           false,
+		STSSeconds:            315360000,
+		STSIncludeSubdomains:  true,
+		FrameDeny:             true,
+		ContentTypeNosniff:    true,
+		BrowserXssFilter:      true,
+		ContentSecurityPolicy: "default-src 'self'",
+	}))
+	*/
 	a.LoadHTMLGlob("/Users/tim/websites/iot/*")
 	make_routs(a)
+
+
 	//Set static folders
-	a.Static("/static/folder", "/Users/tim/websites/cargancode.github.io")
+	//a.Static("/static/folder", "/Users/tim/websites/cargancode.github.io")
 
 	//Start the servers
 	go func(){ a.Run(":8081") }()

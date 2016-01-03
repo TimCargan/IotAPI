@@ -10,7 +10,7 @@ import(
 
 func get_session(c *gin.Context) *sessions.Sessions {
 	session, err := c.Get("sessions")
-	if err != false {
+	if err == false {
 		return nil
 	}
 	ses_cat := session.(*sessions.Sessions)

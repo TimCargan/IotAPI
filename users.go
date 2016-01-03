@@ -117,13 +117,11 @@ func user_validate_email(c *gin.Context){
 Handler for Get /user/:uid
 */
 func user_get(c *gin.Context) {
-	/*
 	if auth(c, 3) == false {
 		c.JSON(401, gin.H{"status": "unauthorized"})
 		return
 	}
-	*/
-
+	
 	hxid := c.Param("uid")
 	//DB connection
 	mon := dial_db(c)
@@ -135,11 +133,14 @@ func user_get(c *gin.Context) {
 		uid := bson.ObjectIdHex(hxid)
 		user = user.getById(uid, db)
 		if user == nil {
-			c.String(200, "User not found " + string(uid))
+			c.String(404, "User not found " + string(uid))
 			return
 		}
 	}else{
-		user.Current(c, db)
+		if user.Current(c, db) == nil {
+			c.JSON(404, gin.H{"status": "User not found"})
+			return
+		}
 	}
 	c.IndentedJSON(200, user)
 }

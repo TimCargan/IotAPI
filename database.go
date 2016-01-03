@@ -34,8 +34,13 @@ func dial_db(c *gin.Context) *mgo.Session{
 //TODO: Need to move to the aprorate files
 //Gets the currently logged in user or returns nil if there is none
 func (u *User) Current(c *gin.Context, db *mgo.Collection) *User {
-	session := get_session(c).Get("user")
-	hxid := session.GetString("uid", "")
+	session := get_session(c)
+	//If there is no session return nil
+	if session == nil {
+		return nil
+	}
+	//One liner
+	hxid := session.Get("user").GetString("uid", "")
 	//If there is no loggedin user return nil
 	if hxid == "" {
 		return nil
