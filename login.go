@@ -11,7 +11,7 @@ import (
 Handler for /
 */
 func login_get(c *gin.Context) {
-	session := c.Sessions("user")
+	session := get_session(c).Get("user")
 	uid := session.GetString("uid", "none")
 	c.HTML(200, "login.html", gin.H{
             "title": uid,
@@ -25,7 +25,7 @@ func login_post(c *gin.Context) {
 	//Validate the user hasnt tried to login more than the set number of times
     //TODO: this is a crude way to do it. Need to find a better way
     
-    session := c.Sessions("user")
+    session := get_session(c).Get("user")
     attemts := session.GetInt("attemts", 0)
     if attemts > MAX_LOGIN_ATTEMPTS {
     	c.String(500, "stop hacking")
@@ -73,7 +73,7 @@ func abort_login(c *gin.Context) {
 	c.Abort()
 }
 func set_login_user(c *gin.Context, user *User){
-	session := c.Sessions("user")
+	session := get_session(c).Get("user")
 	session.Set("uid", user.Id.Hex())
 	session.Set("login", 1)
 }

@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/contrib/gzip"
+	//"github.com/goibibo/gin-gzip"
 	"github.com/plimble/sessions/store/mongo"
 	"gopkg.in/mgo.v2"
 )
@@ -9,9 +11,6 @@ import (
 const mongo_address = "localhost"
 const MAX_LOGIN_ATTEMPTS = 20
 
-var (
-	GS *mgo.Session
-)
 
 func main() {
 	a := gin.Default()
@@ -21,6 +20,7 @@ func main() {
 	if err != nil {
 		panic("db error")
 	}
+	
 	// Reads may not be entirely up-to-date, but they will always see the
 	// history of changes moving forward, the data read will be consistent
 	// across sequential queries in the same session, and modifications made
@@ -33,7 +33,7 @@ func main() {
 	so := gin.SessionOptions{"","localhost",300,false,false}
 	store := mongo.NewMongoStore(mongo_s.Copy(), "test", "session")
 
-	//GS = mongo_s.Copy()
+	a.Use(gzip.Gzip(gzip.DefaultCompression))
 	a.Use(db_middle(mongo_s.Copy()))
 	a.Use(gin.Session(store, &so))
 

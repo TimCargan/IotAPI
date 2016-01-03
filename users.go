@@ -117,13 +117,16 @@ func user_validate_email(c *gin.Context){
 Handler for Get /user/:uid
 */
 func user_get(c *gin.Context) {
+	/*
 	if auth(c, 3) == false {
-		c.String(401, "Must login")
+		c.JSON(401, gin.H{"status": "unauthorized"})
 		return
 	}
+	*/
+
 	hxid := c.Param("uid")
 	//DB connection
-	mon := c.DB
+	mon := dial_db(c)
 	db := mon.DB("user").C("users")
 	user := &User{}
 
@@ -138,7 +141,7 @@ func user_get(c *gin.Context) {
 	}else{
 		user.Current(c, db)
 	}
-	c.JSON(200, user)
+	c.IndentedJSON(200, user)
 }
 
 

@@ -20,7 +20,7 @@ func make_routs(r *gin.Engine) {
 Handler for /
 */
 func index(c *gin.Context) {
-	session := c.Sessions("user")
+	session := get_session(c).Get("user")
 	uid := session.GetString("uid", "none")
 	c.HTML(http.StatusOK, "index.html", gin.H{
             "title": uid,

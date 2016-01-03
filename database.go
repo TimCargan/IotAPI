@@ -5,35 +5,36 @@ import(
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
-//TODO: fix this so it can just store the sesssion in the interface
+
+
 type db_obj struct {
 	session *mgo.Session
 }
 func db_middle(con *mgo.Session) gin.HandlerFunc{
 	return func(c *gin.Context) {
 		session := con.Copy()
-		c.DB = session
+		store := db_obj{session}
+		c.Set("db", store)
 		defer session.Close()
 		c.Next()
 	}
 }
+
 func dial_db(c *gin.Context) *mgo.Session{
 //Connet to the DB
-	/*
-	//con, err := mgo.Dial(mongo_address)
 	con, err := c.Get("db")
 	if err != false {
 		c.AbortWithStatus(500)
-		return nil
+		c.Next()
 	}
-	set := con.(db_obj).session
-	*/
-	return c.DB
+	db_cat := con.(db_obj).session
+	return db_cat
 }
 
+//TODO: Need to move to the aprorate files
 //Gets the currently logged in user or returns nil if there is none
 func (u *User) Current(c *gin.Context, db *mgo.Collection) *User {
-	session := c.Sessions("user")
+	session := get_session(c).Get("user")
 	hxid := session.GetString("uid", "")
 	//If there is no loggedin user return nil
 	if hxid == "" {
