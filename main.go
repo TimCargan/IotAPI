@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/contrib/gzip"
-	//"github.com/gin-gonic/contrib/secure"
+	"github.com/gin-gonic/contrib/secure"
 
 	"github.com/plimble/sessions/store/mongo"
 	"gopkg.in/mgo.v2"
@@ -41,7 +41,7 @@ func main() {
 	//TODO: Need to move out of Gin
 	a.Use(gin.Session(store, &so))
 	//Sets some usefull headers
-	/*
+	
 	a.Use(secure.Secure(secure.Options{
 		IsDevelopment:		   gin.IsDebugging(),
 		AllowedHosts:          []string{"example.com", "ssl.example.com"},
@@ -53,7 +53,7 @@ func main() {
 		BrowserXssFilter:      true,
 		ContentSecurityPolicy: "default-src 'self'",
 	}))
-	*/
+	
 	a.LoadHTMLGlob("/Users/tim/websites/iot/*")
 	make_routs(a)
 
