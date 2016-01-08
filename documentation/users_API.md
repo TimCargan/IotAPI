@@ -1,19 +1,19 @@
 #Users
 This part of the API is just for dealing with users. Standard JSON user object that will be returned looks as follows:
 ```
-	{
-	  "v": 0,
-	  "id": "5681f9abd6f45f8f98c69dfe",
-	  "istemp": false,
-	  "email": "son@gmail.com",
-	  "path": "t3",
-	  "username": "T3",
-	  "dob": "0001-01-01T00:00:00Z",
-	  "name": {
-	    "fullname": "Tim Cargan",
-	    "nickname": "Tim"
-	  }
+{
+	"v": 0,
+	"id": "5681f9abd6f45f8f98c69dfe",
+	"istemp": false,
+	"email": "son@gmail.com",
+	"path": "t3",
+	"username": "T3",
+	"dob": "0001-01-01T00:00:00Z",
+	"name": {
+	"fullname": "Tim Cargan",
+	"nickname": "Tim"
 	}
+}
 ```
 The current auth flow is cookie bassed, however Once the auth middleware is develped in additon to cookies, tokens can and will be used. Once that is in place a better auth flow will be set up. However some things will like remain the same
 
@@ -31,15 +31,15 @@ Crates a new temp user (They will need to validate their email or the account wi
 
 Expected Body:
 ```
-	{
-	  "email": "son@gmail.com",
-	  "username": "T3",
-	  "dob": "0001-01-01T00:00:00Z",
-	  "name": {
-	    "fullname": "Tim Cargan",
-	    "nickname": "Tim"
-	  }
-	}
+{
+  "email": "son@gmail.com",
+  "username": "T3",
+  "dob": "0001-01-01T00:00:00Z",
+  "name": {
+    "fullname": "Tim Cargan",
+    "nickname": "Tim"
+  }
+}
 ```
 ###Get
 	The logged in user will be returned (token owner). Else a 404 will be thrown
