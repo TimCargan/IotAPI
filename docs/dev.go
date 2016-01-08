@@ -43,13 +43,12 @@ func (h Home) new(){
 }
 
 /*
+
 //TODO: need to see how append works
 //Adds a new user to the end of the user list in home 
-func (h Home) add_user(new_user User){
-	old_users := h.Users
-	new_users := make([]User, 0, len(old_users) + 1)
-	copy(new_users, old_users)
-	new_users = append(new_users, new_user)
-	h.Users = new_users
+See for more info https://blog.golang.org/slices
+For helpful tips see https://github.com/golang/go/wiki/SliceTricks
+func (h *Home) add_user(new_user User){
+	h.Users = append(h.Users, new_user)
 }
 */
