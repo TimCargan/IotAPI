@@ -1,24 +1,29 @@
 #Home API
 This is the api that deals with controling the home etc
 
-
+<hr>
 ##/Home/:ID
 ##Post
-	405
+405
+
 ###Get
-	Returns a Home object. Still in the process of finalizing what that will look like
+Returns a Home object. Still in the process of finalizing what that will look like
+
 ###Put
-	Put, used to update parts of the home object provided the user is autorized to do so
+Put, used to update parts of the home object provided the user is autorized to do so
+
 ##Delete
-	Removes the home object
+Removes the home object
 
 ##/Home/:ID/stats
+
 ###Get
 
 ##/Home/:ID/add_user
+
 ##Post
 
-
+<hr>
 ##Rooms
 ##/Home/:ID/:room
 ##Post

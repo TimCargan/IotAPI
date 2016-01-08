@@ -1,4 +1,4 @@
-package docs
+package home
 
 import "gopkg.in/mgo.v2/bson"
 
@@ -42,11 +42,38 @@ type Propertie struct {
 ///////////////////////////////////////////////////////////////////////////
 //-------------------------Functions------------------------------------//
 /////////////////////////////////////////////////////////////////////////
-func (h *Home) new(){
+func new(c *gin.Context) Home{
+	h := Home{}
 	h.V = HOME_VERSION
 	h.Id =	bson.NewObjectId()
+	//h.add_user(user.Current(c)) once the users package is nice and like this one
+	//Once there is a user package
+	//user := Users{}.Current()
+	//h.add_user(user)
+	return h
 }
 
+//will validate weather a given house object is valid/ fully formed
+func (h Home) valid() bool{
+	if h.V == HOME_VERSION && h.Id != nil && h.Name != "" {
+		return true
+	}
+	return false
+}
+//Invers of valid, helps to make things a bit more readable
+func (h Home) invalid() bool {
+	return !h.valid()
+}
+
+//Is the user a valid editor i.e is the user in the slice of users
+func (h Home) isuser(u User) bool {
+	   for _, el := range h.Users {
+        if  el.Id == u.Id {
+            return true
+        }
+    }
+    return false
+}
 /*
 TODO: Coppy for add dev and add room
 TOOD: Create remove user, room and dev
