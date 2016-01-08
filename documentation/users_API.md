@@ -42,37 +42,42 @@ Expected Body:
 }
 ```
 ###Get
-	The logged in user will be returned (token owner). Else a 404 will be thrown
+The logged in user will be returned (token owner). Else a 404 will be thrown
 
 ###Put
-	404
+405
 
 ###Delete
-	404 
+405
 
 <hr>
 
 ##/users/:id
 
 ###Post -- Unimplemented
-	In order to protect user privacy will return a 404
+In order to protect user privacy will return a 404
 
 ###Get -- Needs to be updated
-	Will get the given user provided there is a logged in user
-	If the user doesn’t exist a 404 will be returned.
+Will get the given user provided there is a logged in user
+If the user doesn’t exist a 404 will be returned.
 
 ###Put
-	Will update the given users according properties
-	Takes a JSON user object in the body of the request
-		{
+Will update the given users according properties
+Takes a JSON user object in the body of the request
+```
+{
+  "username": "T3",
+  "dob": "0001-01-01T00:00:00Z",
+  "name": {
+    "fullname": "Tim Cargan",
+    "nickname": "Tim"
+  }
+}
+```
 
-		Username string 	`bson:"username" json:"username,omitempty" structs:"username,omitempty"`
-		Dob	time.Time		`bson:"dob" json:"dob,omitempty" structs:"dob,omitempty"`
-			Name: {FullName: "Tim NewName Cargan", nickname: "New"}
-		}
-
-	Known Bugs
-		You can freely update the users email without having to re-validate.
+####Known Bugs
+* You can freely update the users email without having to re-validate.
+* The username, if updated isnt passed and updated in the internal path property, means they have 2 usernames
 
 ###Delete -- Unimplemented
-	If the logged in user matches will remove the user
+If the logged in user matches will remove the user
