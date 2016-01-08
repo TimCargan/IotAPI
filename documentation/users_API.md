@@ -10,8 +10,8 @@ This part of the API is just for dealing with users. Standard JSON user object t
 	"username": "T3",
 	"dob": "0001-01-01T00:00:00Z",
 	"name": {
-	"fullname": "Tim Cargan",
-	"nickname": "Tim"
+		"fullname": "Tim Cargan",
+		"nickname": "Tim"
 	}
 }
 ```
