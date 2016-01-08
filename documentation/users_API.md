@@ -1,6 +1,6 @@
 #Users
 This part of the API is just for dealing with users. Standard JSON user object that will be returned looks as follows:
-
+```
 	{
 	  "v": 0,
 	  "id": "5681f9abd6f45f8f98c69dfe",
@@ -14,22 +14,23 @@ This part of the API is just for dealing with users. Standard JSON user object t
 	    "nickname": "Tim"
 	  }
 	}
-
+```
 The current auth flow is cookie bassed, however Once the auth middleware is develped in additon to cookies, tokens can and will be used. Once that is in place a better auth flow will be set up. However some things will like remain the same
 
-	*Session state will persist accross the token e.g
-		Any API limits will apply to the token
+* Session state will persist accross the token e.g
+	Any API limits will apply to the token
 
-	*Rate limmits will exist be applied to the user and are token agnostic. This is in additon to standard IP rate limmiting etc.
+* Rate limmits will exist be applied to the user and are token agnostic. This is in additon to standard IP rate limmiting etc.
 
 <hr>
 
 ##/users/
 
 ###Post 
-	Crates a new temp user (They will need to validate their email or the account will stay as temp and be removed from the db). The user will have steps to complete in order to validate the account. See "User creation flow" for more info
+Crates a new temp user (They will need to validate their email or the account will stay as temp and be removed from the db). The user will have steps to complete in order to validate the account. See "User creation flow" for more info
 
-	Expected Body:
+Expected Body:
+```
 	{
 	  "email": "son@gmail.com",
 	  "username": "T3",
@@ -39,7 +40,7 @@ The current auth flow is cookie bassed, however Once the auth middleware is deve
 	    "nickname": "Tim"
 	  }
 	}
-
+```
 ###Get
 	The logged in user will be returned (token owner). Else a 404 will be thrown
 
