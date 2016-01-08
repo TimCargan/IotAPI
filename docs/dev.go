@@ -9,7 +9,7 @@ const HOME_VERSION =  1
 type Home struct{
 	V int 				`bson:"v" json:"v" structs:"-"`
 	Id bson.ObjectId 	`bson:"_id" json:"id,omitempty" structs:"-"`
-	Name string 		`bson:"name" json: "name" structs:"name"`
+	Name string 		`bson:"name" json: "name" structs:"name,omitempty"`
 	Users []string 		`bson:"users" json: "users" structs:"-"`
 	Devs  []Dev			`bson:"devs" json: "devs" structs:"-"`
 	Rooms []Room		`bson:"rooms" json: "rooms" structs:"-"`
@@ -18,32 +18,38 @@ type Home struct{
 type Room struct{
 	V int 				`bson:"v" json:"v" structs:"-"`
 	Id bson.ObjectId 	`bson:"_id" json:"id,omitempty" structs:"-"`
-	Name 	string
-	users	[]string
-	dev 	[]Dev
+	Name string			`bson:"name" json:"name" structs:"name,omitempty"`
+	users []string		`bson:"users" json:"users" structs:"-"`
+	Devs []Dev 			`bson:"devs" json:"devs" structs:"-"`
 }
 
 
 type Dev struct {
-	id 		bson.ObjectId
-	v		string
-	mac		string
-	props	[]Propertie
+	Id 	bson.ObjectId 	`bson:"_id" json:"id" structs:"-"`
+	V	string			`bson:"v" json:"v" structs:"-"`
+	Mac	string			`bson:"mac" json:"mac" structs:"-"`
+	Props []Propertie	`bson:"props" json:"props" structs:"-"`
 }
 
 type Propertie struct {
-	Id 		bson.ObjectId
-	name 	string
-	value	int
+	Id 	bson.ObjectId 	`bson:"_id" json:"id" structs:"-"`
+	Name string 		`bson:"name" json:"name" structs:"name,omitempty"`
+	Value int 			`bson:"value" json:"vlaue" structs:"value,omitempty"`
+	kind int 			`bson:"kind" json:"kind" structs:"-"`
 }
 
-func (h Home) new(){
+
+///////////////////////////////////////////////////////////////////////////
+//-------------------------Functions------------------------------------//
+/////////////////////////////////////////////////////////////////////////
+func (h *Home) new(){
 	h.V = HOME_VERSION
 	h.Id =	bson.NewObjectId()
 }
 
 /*
-
+TODO: Coppy for add dev and add room
+TOOD: Create remove user, room and dev
 //TODO: need to see how append works
 //Adds a new user to the end of the user list in home 
 See for more info https://blog.golang.org/slices
