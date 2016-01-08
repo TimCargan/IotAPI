@@ -58,5 +58,4 @@ Version {
 	v
 	Major
 	Minor
-
 }

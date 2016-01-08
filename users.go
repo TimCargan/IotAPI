@@ -20,11 +20,7 @@ If the user doesnt respond to the email the user should be removed from the db.
 */
 func user_post(c *gin.Context) {
 	//DB connection
-	mon, err := mgo.Dial(mongo_address)
-	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-	}
-	defer mon.Close()
+	mon:= dial_db(c)
 	db := mon.DB("user").C("users")
 	pw := mon.DB("pass").C("pass")
 
@@ -73,11 +69,7 @@ func user_post(c *gin.Context) {
 
 func user_validate_email(c *gin.Context){
 	//DB connection
-	mon, err := mgo.Dial(mongo_address)
-	if err != nil {
-		c.AbortWithError(500, err)
-	}
-	defer mon.Close()
+	mon:= dial_db(c)
 	db := mon.DB("user").C("users")
 
 	//Get token
@@ -117,11 +109,12 @@ func user_validate_email(c *gin.Context){
 Handler for Get /user/:uid
 */
 func user_get(c *gin.Context) {
+	/*
 	if auth(c, 3) == false {
-		c.JSON(401, gin.H{"status": "unauthorized"})
+		c.JSON(401, gin.H{"status": "Unauthorized"})
 		return
 	}
-	
+	*/
 	hxid := c.Param("uid")
 	//DB connection
 	mon := dial_db(c)
@@ -130,10 +123,14 @@ func user_get(c *gin.Context) {
 
 	if hxid != "" {
 		//Fetch user from db
+		if !bson.IsObjectIdHex(hxid) {
+			c.JSON(404, gin.H{"status": "User not found"})
+			return
+		}
 		uid := bson.ObjectIdHex(hxid)
 		user = user.getById(uid, db)
 		if user == nil {
-			c.String(404, "User not found " + string(uid))
+			c.JSON(404, gin.H{"status": "User not found"})
 			return
 		}
 	}else{
@@ -148,7 +145,7 @@ func user_get(c *gin.Context) {
 
 /*
 Handler for Update /user/:uid
-
+TODO: BUG FIX, users can just update there email whenever... Should fix
 */
 func user_put(c *gin.Context) {
 	hxid := c.Param("uid")
@@ -160,15 +157,10 @@ func user_put(c *gin.Context) {
 	}
 
 	//DB connection
-	mon, err := mgo.Dial(mongo_address)
-	if err != nil {
-		panic("db error")
-	}
-	defer mon.Close()
-	db := mon.DB("test").C("foo")
+	mon := dial_db(c)
+	db := mon.DB("user").C("users")
 
 
-	
 	user := User{}
 	c.Bind(&user)
 

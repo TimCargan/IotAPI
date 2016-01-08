@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/contrib/gzip"
 	"github.com/gin-gonic/contrib/secure"
-
+	
 	"github.com/plimble/sessions/store/mongo"
 	"gopkg.in/mgo.v2"
 )
@@ -51,7 +51,7 @@ func main() {
 		FrameDeny:             true,
 		ContentTypeNosniff:    true,
 		BrowserXssFilter:      true,
-		ContentSecurityPolicy: "default-src 'self'",
+		ContentSecurityPolicy: "default-src 'self'; style-src http://cargancode.io;",
 	}))
 	
 	a.LoadHTMLGlob("/Users/tim/websites/iot/*")
