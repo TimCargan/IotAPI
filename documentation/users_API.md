@@ -1,6 +1,6 @@
 #Users
 This part of the API is just for dealing with users. Standard JSON user object that will be returned looks as follows:
-```
+```JSON
 {
 	"v": 0,
 	"id": "5681f9abd6f45f8f98c69dfe",
