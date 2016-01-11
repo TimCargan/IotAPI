@@ -30,7 +30,7 @@ The current auth flow is cookie bassed, however Once the auth middleware is deve
 Crates a new temp user (They will need to validate their email or the account will stay as temp and be removed from the db). The user will have steps to complete in order to validate the account. See "User creation flow" for more info
 
 Expected Body:
-```
+```JSON
 {
   "email": "son@gmail.com",
   "username": "T3",
@@ -64,7 +64,7 @@ If the user doesn’t exist a 404 will be returned.
 ###Put
 Will update the given users according properties
 Takes a JSON user object in the body of the request
-```
+```JSON
 {
   "username": "T3",
   "dob": "0001-01-01T00:00:00Z",
